@@ -8,7 +8,6 @@ import (
 
 // GenerateDockerfile generates the Dockerfile for static files.
 func GenerateDockerfile(meta types.PlanMeta) (string, error) {
-
 	if meta["framework"] == "hugo" {
 		return `FROM klakegg/hugo:ubuntu as builder
 WORKDIR /src
@@ -30,7 +29,6 @@ RUN ["zola", "build"]
 FROM scratch as output
 COPY --from=builder /app/public /
 `, nil
-
 	}
 
 	dockerfile := `FROM scratch as output

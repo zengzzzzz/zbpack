@@ -21,7 +21,7 @@ func TestProjectConfiguration_ZbpackJsonExisted(t *testing.T) {
 	t.Parallel()
 
 	fs := afero.NewMemMapFs()
-	_ = afero.WriteFile(fs, "zbpack.json", []byte(`{"laravel":{"test": "owo" }}`), 0644)
+	_ = afero.WriteFile(fs, "zbpack.json", []byte(`{"laravel":{"test": "owo" }}`), 0o644)
 
 	config := plan.NewProjectConfigurationFromFs(fs, "")
 
@@ -47,7 +47,7 @@ func TestProjectConfiguration_RootMalformed(t *testing.T) {
 	t.Parallel()
 
 	fs := afero.NewMemMapFs()
-	_ = afero.WriteFile(fs, "zbpack.json", []byte(`I'm not JSON'`), 0644)
+	_ = afero.WriteFile(fs, "zbpack.json", []byte(`I'm not JSON'`), 0o644)
 
 	config := plan.NewProjectConfigurationFromFs(fs, "")
 
@@ -58,7 +58,7 @@ func TestProjectConfiguration_SubmoduleMalformed(t *testing.T) {
 	t.Parallel()
 
 	fs := afero.NewMemMapFs()
-	_ = afero.WriteFile(fs, "zbpack.hi.json", []byte(`I'm not JSON'`), 0644)
+	_ = afero.WriteFile(fs, "zbpack.hi.json", []byte(`I'm not JSON'`), 0o644)
 
 	config := plan.NewProjectConfigurationFromFs(fs, "hi")
 
@@ -69,8 +69,8 @@ func TestProjectConfiguration_SubmoduleMalformedWhileRootWorks(t *testing.T) {
 	t.Parallel()
 
 	fs := afero.NewMemMapFs()
-	_ = afero.WriteFile(fs, "zbpack.json", []byte(`{"hi": 1234}`), 0644)
-	_ = afero.WriteFile(fs, "zbpack.hi.json", []byte(`I'm not JSON'`), 0644)
+	_ = afero.WriteFile(fs, "zbpack.json", []byte(`{"hi": 1234}`), 0o644)
+	_ = afero.WriteFile(fs, "zbpack.hi.json", []byte(`I'm not JSON'`), 0o644)
 
 	config := plan.NewProjectConfigurationFromFs(fs, "hi")
 
@@ -82,7 +82,7 @@ func TestGet_Global(t *testing.T) {
 
 	fs := afero.NewMemMapFs()
 
-	_ = afero.WriteFile(fs, "zbpack.json", []byte(`{ "build_command": "build" }`), 0644)
+	_ = afero.WriteFile(fs, "zbpack.json", []byte(`{ "build_command": "build" }`), 0o644)
 
 	config := plan.NewProjectConfigurationFromFs(fs, "global_test")
 	assert.Equal(t, optional.Some[any]("build"), config.Get("build_command"))
@@ -92,7 +92,7 @@ func TestGet_Submodule(t *testing.T) {
 	t.Parallel()
 
 	fs := afero.NewMemMapFs()
-	_ = afero.WriteFile(fs, "zbpack.test.json", []byte(`{ "build_command": "build#test" }`), 0644)
+	_ = afero.WriteFile(fs, "zbpack.test.json", []byte(`{ "build_command": "build#test" }`), 0o644)
 
 	config := plan.NewProjectConfigurationFromFs(fs, "test")
 	assert.Equal(t, optional.Some[any]("build#test"), config.Get("build_command"))
@@ -102,8 +102,8 @@ func TestGet_SubmoduleOverride(t *testing.T) {
 	t.Parallel()
 
 	fs := afero.NewMemMapFs()
-	_ = afero.WriteFile(fs, "zbpack.json", []byte(`{ "build_command": "build" }`), 0644)
-	_ = afero.WriteFile(fs, "zbpack.test.json", []byte(`{ "build_command": "build#test" }`), 0644)
+	_ = afero.WriteFile(fs, "zbpack.json", []byte(`{ "build_command": "build" }`), 0o644)
+	_ = afero.WriteFile(fs, "zbpack.test.json", []byte(`{ "build_command": "build#test" }`), 0o644)
 
 	config := plan.NewProjectConfigurationFromFs(fs, "test")
 	assert.Equal(t, optional.Some[any]("build#test"), config.Get("build_command"))
@@ -113,8 +113,8 @@ func TestGet_SubmoduleFallback(t *testing.T) {
 	t.Parallel()
 
 	fs := afero.NewMemMapFs()
-	_ = afero.WriteFile(fs, "zbpack.json", []byte(`{ "build_command": "build" }`), 0644)
-	_ = afero.WriteFile(fs, "zbpack.test.json", []byte(`{}`), 0644)
+	_ = afero.WriteFile(fs, "zbpack.json", []byte(`{ "build_command": "build" }`), 0o644)
+	_ = afero.WriteFile(fs, "zbpack.test.json", []byte(`{}`), 0o644)
 
 	config := plan.NewProjectConfigurationFromFs(fs, "test")
 	assert.Equal(t, optional.Some[any]("build"), config.Get("build_command"))
@@ -124,7 +124,7 @@ func TestGet_None(t *testing.T) {
 	t.Parallel()
 
 	fs := afero.NewMemMapFs()
-	_ = afero.WriteFile(fs, "zbpack.json", []byte(`{}`), 0644)
+	_ = afero.WriteFile(fs, "zbpack.json", []byte(`{}`), 0o644)
 
 	config := plan.NewProjectConfigurationFromFs(fs, "")
 	assert.True(t, config.Get("build_command").IsNone())

@@ -19,7 +19,6 @@ var indexJs string
 
 // TransformServerless will transform the build output of Remix app to the serverless build output format of Zeabur
 func TransformServerless(workdir string) error {
-
 	// create a tmpDir to store the build output
 	uuid := uuid2.New().String()
 	tmpDir := path.Join(os.TempDir(), uuid)
@@ -44,7 +43,7 @@ func TransformServerless(workdir string) error {
 
 	fmt.Println("=> Copying static asset files")
 
-	err = os.MkdirAll(path.Join(zeaburOutputDir, "static"), 0755)
+	err = os.MkdirAll(path.Join(zeaburOutputDir, "static"), 0o755)
 	if err != nil {
 		return fmt.Errorf("create static dir: %w", err)
 	}
@@ -56,12 +55,12 @@ func TransformServerless(workdir string) error {
 
 	fmt.Println("=> Copying remix build output")
 
-	err = os.MkdirAll(path.Join(zeaburOutputDir, "functions"), 0755)
+	err = os.MkdirAll(path.Join(zeaburOutputDir, "functions"), 0o755)
 	if err != nil {
 		return fmt.Errorf("create functions dir: %w", err)
 	}
 
-	_ = os.MkdirAll(path.Join(zeaburOutputDir, "functions/index.func"), 0755)
+	_ = os.MkdirAll(path.Join(zeaburOutputDir, "functions/index.func"), 0o755)
 	err = cp.Copy(remixBuildDir, path.Join(zeaburOutputDir, "functions/index.func/build"))
 	if err != nil {
 		return fmt.Errorf("copy waku's RSC function dir: %w", err)
@@ -83,7 +82,7 @@ func TransformServerless(workdir string) error {
 		return err
 	}
 
-	err = os.WriteFile(path.Join(workdir, ".zeabur/output/config.json"), configBytes, 0644)
+	err = os.WriteFile(path.Join(workdir, ".zeabur/output/config.json"), configBytes, 0o644)
 	if err != nil {
 		return err
 	}
@@ -95,7 +94,7 @@ func TransformServerless(workdir string) error {
 		return fmt.Errorf("copy package.json: %w", err)
 	}
 
-	err = os.WriteFile(path.Join(zeaburOutputDir, "functions/index.func/index.mjs"), []byte(indexJs), 0644)
+	err = os.WriteFile(path.Join(zeaburOutputDir, "functions/index.func/index.mjs"), []byte(indexJs), 0o644)
 	if err != nil {
 		return fmt.Errorf("write index.mjs: %w", err)
 	}

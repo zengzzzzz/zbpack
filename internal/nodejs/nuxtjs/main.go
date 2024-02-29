@@ -15,7 +15,6 @@ import (
 
 // TransformServerless will transform build output of Nuxt.js app to the serverless build output format of Zeabur
 func TransformServerless(workdir string) error {
-
 	// create a tmpDir to store the build output of Next.js app
 	uuid := uuid2.New().String()
 	tmpDir := path.Join(os.TempDir(), uuid)
@@ -41,7 +40,7 @@ func TransformServerless(workdir string) error {
 
 	fmt.Println("=> Copying static asset files")
 
-	err = os.MkdirAll(path.Join(zeaburOutputDir, "static"), 0755)
+	err = os.MkdirAll(path.Join(zeaburOutputDir, "static"), 0o755)
 	if err != nil {
 		return fmt.Errorf("create static dir: %w", err)
 	}
@@ -51,7 +50,7 @@ func TransformServerless(workdir string) error {
 		return fmt.Errorf("copy static dir: %w", err)
 	}
 
-	err = os.MkdirAll(path.Join(zeaburOutputDir, "functions"), 0755)
+	err = os.MkdirAll(path.Join(zeaburOutputDir, "functions"), 0o755)
 	if err != nil {
 		return fmt.Errorf("create functions dir: %w", err)
 	}
@@ -68,7 +67,7 @@ func TransformServerless(workdir string) error {
 		return err
 	}
 
-	err = os.WriteFile(path.Join(workdir, ".zeabur/output/config.json"), configBytes, 0644)
+	err = os.WriteFile(path.Join(workdir, ".zeabur/output/config.json"), configBytes, 0o644)
 	if err != nil {
 		return err
 	}

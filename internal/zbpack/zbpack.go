@@ -60,7 +60,6 @@ func run(args []string) error {
 
 // build is used to build Docker image and show build plan.
 func build(path string) error {
-
 	// before start, check if buildctl is installed and buildkitd is running
 	err := exec.Command("buildctl", "debug", "workers").Run()
 	if err != nil {

@@ -18,7 +18,7 @@ func TestUpdateOptionsOnConfig_FromConfig(t *testing.T) {
 		"build_command": "build",
 		"start_command": "start",
 		"output_dir": "dist"
-	}`), 0644)
+	}`), 0o644)
 
 	options := &zeaburpack.PlanOptions{}
 	config := plan.NewProjectConfigurationFromFs(fs, "")
@@ -38,7 +38,7 @@ func TestUpdateOptionsOnConfig_NotUpdateIfDefined(t *testing.T) {
 		"build_command": "build",
 		"start_command": "start",
 		"output_dir": "dist"
-	}`), 0644)
+	}`), 0o644)
 
 	options := &zeaburpack.PlanOptions{
 		CustomBuildCommand: lo.ToPtr("build2"),
@@ -59,7 +59,7 @@ func TestUpdateOptionsOnConfig_LeaveIfAllEmpty(t *testing.T) {
 	_ = afero.WriteFile(fs, "zbpack.json", []byte(`{
 		"start_command": "start",
 		"output_dir": "dist"
-	}`), 0644)
+	}`), 0o644)
 
 	options := &zeaburpack.PlanOptions{}
 	config := plan.NewProjectConfigurationFromFs(fs, "")
@@ -79,7 +79,7 @@ func TestUpdateOptionsOnConfig_CheckType(t *testing.T) {
 		"build_command": 123,
 		"start_command": 123,
 		"output_dir": 123
-	}`), 0644)
+	}`), 0o644)
 
 	config := plan.NewProjectConfigurationFromFs(fs, "")
 

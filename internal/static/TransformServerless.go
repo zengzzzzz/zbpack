@@ -36,7 +36,7 @@ func TransformServerless(workdir string, meta types.PlanMeta) error {
 		return err
 	}
 
-	err = os.WriteFile(path.Join(workdir, ".zeabur/output/config.json"), configBytes, 0644)
+	err = os.WriteFile(path.Join(workdir, ".zeabur/output/config.json"), configBytes, 0o644)
 	if err != nil {
 		return err
 	}

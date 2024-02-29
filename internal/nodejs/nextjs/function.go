@@ -15,7 +15,7 @@ import (
 func constructNextFunction(zeaburOutputDir, tmpDir string) error {
 	p := path.Join(zeaburOutputDir, "functions", "__next.func")
 
-	err := os.MkdirAll(p, 0755)
+	err := os.MkdirAll(p, 0o755)
 	if err != nil {
 		return fmt.Errorf("create function dir: %w", err)
 	}
@@ -25,7 +25,7 @@ func constructNextFunction(zeaburOutputDir, tmpDir string) error {
 		return fmt.Errorf("render launcher: %w", err)
 	}
 
-	err = os.WriteFile(path.Join(p, "index.js"), []byte(launcher), 0644)
+	err = os.WriteFile(path.Join(p, "index.js"), []byte(launcher), 0o644)
 	if err != nil {
 		return fmt.Errorf("write launcher: %w", err)
 	}
@@ -41,7 +41,7 @@ func constructNextFunction(zeaburOutputDir, tmpDir string) error {
 	}
 
 	content = []byte(strings.ReplaceAll(string(content), `"type": "module",`, ""))
-	err = os.WriteFile(path.Join(p, "package.json"), content, 0644)
+	err = os.WriteFile(path.Join(p, "package.json"), content, 0o644)
 	if err != nil {
 		return fmt.Errorf("write package.json: %w", err)
 	}
@@ -50,7 +50,7 @@ func constructNextFunction(zeaburOutputDir, tmpDir string) error {
 	_ = cp.Copy(path.Join(tmpDir, "next-i18next.config.js"), path.Join(p, "next-i18next.config.js"))
 
 	outputNodeModulesDir := path.Join(p, "node_modules")
-	err = os.MkdirAll(outputNodeModulesDir, 0755)
+	err = os.MkdirAll(outputNodeModulesDir, 0o755)
 	if err != nil {
 		return fmt.Errorf("create node_modules dir: %w", err)
 	}
@@ -89,7 +89,7 @@ func constructNextFunction(zeaburOutputDir, tmpDir string) error {
 	for _, dep := range deps {
 		to := strings.Replace(dep, tmpDir, p, 1)
 
-		err = os.MkdirAll(path.Dir(to), 0755)
+		err = os.MkdirAll(path.Dir(to), 0o755)
 		if err != nil {
 			return fmt.Errorf("mkdirall: %w", err)
 		}
@@ -118,7 +118,7 @@ func constructNextFunction(zeaburOutputDir, tmpDir string) error {
 				return fmt.Errorf("read file: %w", err)
 			}
 
-			err = os.WriteFile(to, read, 0644)
+			err = os.WriteFile(to, read, 0o644)
 			if err != nil {
 				return fmt.Errorf("write file: %w", err)
 			}

@@ -21,7 +21,6 @@ import (
 // TransformServerless will transform build output of Next.js app to the serverless build output format of Zeabur
 // It is trying to implement the same logic as build function of https://github.com/vercel/vercel/tree/main/packages/next/src/index.ts
 func TransformServerless(workdir string) error {
-
 	// create a tmpDir to store the build output of Next.js app
 	uuid := uuid2.New().String()
 	tmpDir := path.Join(os.TempDir(), uuid)
@@ -71,7 +70,6 @@ func TransformServerless(workdir string) error {
 	})
 
 	_ = filepath.Walk(nextOutputServerAppDir, func(p string, info os.FileInfo, err error) error {
-
 		// if we found any page.js or route.js inside .next/server/app, this is a serverless function
 		if strings.HasSuffix(p, "page.js") || strings.HasSuffix(p, "route.js") {
 			funcPath := strings.TrimPrefix(p, nextOutputServerAppDir)
@@ -90,7 +88,7 @@ func TransformServerless(workdir string) error {
 
 	fmt.Println("=> Copying static asset files")
 
-	err = os.MkdirAll(path.Join(zeaburOutputDir, "static"), 0755)
+	err = os.MkdirAll(path.Join(zeaburOutputDir, "static"), 0o755)
 	if err != nil {
 		return fmt.Errorf("create static dir: %w", err)
 	}
@@ -147,7 +145,7 @@ func TransformServerless(workdir string) error {
 		return fmt.Errorf("marshal config: %w", err)
 	}
 
-	err = os.WriteFile(path.Join(zeaburOutputDir, "config.json"), cfgBytes, 0644)
+	err = os.WriteFile(path.Join(zeaburOutputDir, "config.json"), cfgBytes, 0o644)
 	if err != nil {
 		return fmt.Errorf("write config: %w", err)
 	}
@@ -189,8 +187,8 @@ func buildMiddleware(workdir, zeaburOutputDir string) error {
 	}
 
 	wp := path.Join(zeaburOutputDir, "functions/_middleware.func/index.js")
-	_ = os.MkdirAll(path.Dir(wp), 0755)
-	err := os.WriteFile(wp, res.OutputFiles[0].Contents, 0644)
+	_ = os.MkdirAll(path.Dir(wp), 0o755)
+	err := os.WriteFile(wp, res.OutputFiles[0].Contents, 0o644)
 	if err != nil {
 		return fmt.Errorf("write middleware: %w", err)
 	}

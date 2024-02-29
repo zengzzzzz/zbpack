@@ -367,10 +367,12 @@ func GetStartScript(ctx *nodePlanContext) string {
 	return ss.Unwrap()
 }
 
-const defaultNodeVersion = "18"
-const minNodeVersion uint64 = 4
-const maxNodeVersion uint64 = 20
-const maxLtsNodeVersion uint64 = 18
+const (
+	defaultNodeVersion        = "18"
+	minNodeVersion     uint64 = 4
+	maxNodeVersion     uint64 = 20
+	maxLtsNodeVersion  uint64 = 18
+)
 
 func getNodeVersion(versionConstraint string) string {
 	if versionConstraint == "" {
@@ -388,7 +390,7 @@ func getNodeVersion(versionConstraint string) string {
 	// Use regex to find a version if the constraint
 	// has only one version condition and only limited
 	// in a major version.
-	var versionRegex = regexp.MustCompile(`^v?(?P<op>[~=^]?)(?P<major>[1-9]\d*)\.(?P<minor>0|[1-9]\d*|\*)\.(?P<patch>0|[1-9]\d*|\*)$`)
+	versionRegex := regexp.MustCompile(`^v?(?P<op>[~=^]?)(?P<major>[1-9]\d*)\.(?P<minor>0|[1-9]\d*|\*)\.(?P<patch>0|[1-9]\d*|\*)$`)
 	if matched := versionRegex.FindStringSubmatch(versionConstraint); matched != nil {
 		op := matched[1]
 		major := matched[2]
